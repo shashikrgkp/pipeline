@@ -1,0 +1,45 @@
+name: Build and Check
+
+# Trigger workflow on push to main and pull requests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Node.js (for example if you're building a Node.js project)
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      # Install dependencies (for a Node.js project)
+      - name: Install dependencies
+        run: npm install
+
+      # Run build script (change as necessary for your project)
+      - name: Run build
+        run: npm run build
+
+      # Run tests (optional if you have tests)
+      - name: Run tests
+        run: npm test
+
+      # Check if the build was successful and all tests passed
+      - name: Check build and tests
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Build or tests failed!"
+            exit 1
+          fi
